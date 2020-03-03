@@ -27,7 +27,7 @@ module.exports = (sequelize) => {
     Client.associate = (models) => {
         Client.hasMany(models.Assignment, {
             foreignKey: {
-                fieldName: 'clientName',
+                fieldName: 'clientId',
                 allowNull: false
             },
 

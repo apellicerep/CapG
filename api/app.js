@@ -6,7 +6,6 @@ const cors = require('cors');
 const path = require('path')
 
 
-
 // variable to enable global error logging
 const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'true';
 
@@ -15,6 +14,7 @@ const app = express();
 
 //route
 const assignmentRouter = require('./routes/assignments')
+const seedRouter = require('./routes/seed')
 
 //use cors
 app.use(cors({
@@ -25,11 +25,11 @@ app.use(cors({
 //Production
 //app.use(express.static(path.join(__dirname, 'build')));
 
-
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/api/assignments', assignmentRouter)
+app.use('/api/seed', seedRouter)
 
 //Production
 // app.get('/*', function(req, res) {
@@ -61,7 +61,7 @@ app.set('port', process.env.PORT || 5000);
 
 
 // start listening on our port -con { force: true } creo tablas de nuevo y pierdo la info!
-sequelize.sync({ force: true }).then(() => {
+sequelize.sync().then(() => {
     app.listen(app.get('port'), () => {
         console.log(`Express server is listening on port ${app.get('port')}`);
     })

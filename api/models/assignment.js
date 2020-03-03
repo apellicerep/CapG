@@ -7,6 +7,11 @@ module.exports = (sequelize) => {
         name: {
             type: Sequelize.STRING,
             allowNull: false,
+            unique: true,
+        },
+        percentage: {
+            type: Sequelize.INTEGER,
+            defaultValue: 0
         },
         start_date: {
             type: Sequelize.DATEONLY,
@@ -15,6 +20,10 @@ module.exports = (sequelize) => {
         end_date: {
             type: Sequelize.DATEONLY,
             allowNull: false
+        },
+        comment: {
+            type: Sequelize.STRING,
+            allowNull: true
         }
     }, { sequelize });
 
@@ -25,7 +34,7 @@ module.exports = (sequelize) => {
         })
         Assignment.belongsTo(models.Client, {
             foreignKey: {
-                fieldName: 'clientName',
+                fieldName: 'clientId',
                 allowNull: false
             },
         })
