@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { User, Client, Assignment, } = require('../models')
-const { body, check, validationResult } = require('express-validator')
+const { body, validationResult } = require('express-validator')
 const { Op } = require("sequelize");
 
 /* Handler function to wrap each route. */
@@ -76,8 +76,6 @@ router.get('/:id', asyncHandler(async (req, res) => {
     assignment ?
         res.status(200).json({ data: assignment }) :
         res.status(404).send("Not Found")
-
-
 
 }))
 

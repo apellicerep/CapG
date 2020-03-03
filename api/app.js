@@ -22,7 +22,7 @@ app.use(cors({
     //para poder redireccionarlo.
 }));
 
-//Production
+////Production
 //app.use(express.static(path.join(__dirname, 'build')));
 
 app.use(morgan('dev'));
@@ -31,7 +31,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/api/assignments', assignmentRouter)
 app.use('/api/seed', seedRouter)
 
-//Production
+////Production
 // app.get('/*', function(req, res) {
 //     res.sendFile(path.join(__dirname, 'build', 'index.html'));
 //   });
