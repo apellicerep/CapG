@@ -33,14 +33,11 @@ const useStyles = makeStyles(theme => ({
         '& > *': {
             margin: theme.spacing(0.3),
         },
-
     },
     nested2: {
         paddingLeft: theme.spacing(3),
         overflowWrap: 'break-word',
         paddingRight: theme.spacing(5)
-
-
     },
     item: {
         marginBottom: theme.spacing(2)
@@ -64,7 +61,6 @@ export default function Assignment({ item, index }) {
     const handleClick = () => {
         setOpen(!open);
     };
-    console.log("item", item)
 
     return (
         <>

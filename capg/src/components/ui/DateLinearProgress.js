@@ -35,7 +35,6 @@ export default function LinearDeterminate({ prog, startDate, endDate }) {
                         className={classes.spanAss}>
                         Start date:
                     </Typography>
-
                     {startDate}
                 </Grid>
                 <Grid item>
@@ -55,7 +54,7 @@ export default function LinearDeterminate({ prog, startDate, endDate }) {
             >
                 <Grid item>
                     0%
-            </Grid>
+                </Grid>
                 <Grid item>
                     {prog}%
                 </Grid>
