@@ -39,7 +39,7 @@ router.get('/', asyncHandler(async (req, res) => {
         },
         include: [{
             model: User,
-            attributes: ['name', 'surname'],
+            attributes: ['id', 'name', 'surname'],
             where: {
                 id: {
                     [Op.or]: arrayUsersManaged
