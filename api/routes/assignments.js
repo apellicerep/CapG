@@ -44,6 +44,9 @@ router.get('/', asyncHandler(async (req, res) => {
                 id: {
                     [Op.or]: arrayUsersManaged
                 }
+            },
+            through: {
+                attributes: []
             }
         }, {
             model: Client,
@@ -96,9 +99,12 @@ router.post('/', [
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
-
+        const { consultants } = req.body
+        delete req.body.consultants
+        console.log(Object.keys(Assignment.prototype))
         try {
-            await Assignment.create(req.body)
+            const asign = await Assignment.create(req.body)
+            await asign.addUser(consultants)
             res.status(201).end()
         } catch (error) {
 

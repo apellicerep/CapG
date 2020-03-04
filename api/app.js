@@ -14,6 +14,8 @@ const app = express();
 
 //route
 const assignmentRouter = require('./routes/assignments')
+const clientRouter = require('./routes/clients')
+const userRouter = require('./routes/users')
 const seedRouter = require('./routes/seed')
 
 //use cors
@@ -29,6 +31,8 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/api/assignments', assignmentRouter)
+app.use('/api/clients', clientRouter)
+app.use('/api/users', userRouter)
 app.use('/api/seed', seedRouter)
 
 ////Production
@@ -65,5 +69,4 @@ sequelize.sync().then(() => {
     app.listen(app.get('port'), () => {
         console.log(`Express server is listening on port ${app.get('port')}`);
     })
-
 });

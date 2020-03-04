@@ -10,7 +10,7 @@ const usePaperStyles = makeStyles(theme => ({
         padding: '2px 4px',
         display: 'flex',
         alignItems: 'center',
-        width: 300,
+        width: '16rem',
         margin: theme.spacing(2)
     },
     input: {

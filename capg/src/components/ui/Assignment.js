@@ -18,6 +18,7 @@ import { IconButton } from '@material-ui/core';
 import DateLinearProgress from './DateLinearProgress'
 import Typography from '@material-ui/core/Typography'
 import ConsultantChip from '../ui/ConsultantChip'
+import MoreVertMenu from '../ui/MoreVertMenu'
 
 
 const useStyles = makeStyles(theme => ({
@@ -98,9 +99,7 @@ export default function Assignment({ item, index }) {
                     </Grid>
                 </>
                 <ListItemIcon >
-                    <IconButton>
-                        <MoreVertIcon className={classes.item3} />
-                    </IconButton>
+                    <MoreVertMenu />
                 </ListItemIcon>
             </ListItem>
             <Collapse in={(index === 0) ? !open : open} timeout="auto" unmountOnExit>
