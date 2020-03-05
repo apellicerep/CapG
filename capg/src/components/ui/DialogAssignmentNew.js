@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import moment from "moment"
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -8,13 +9,21 @@ import { makeStyles } from '@material-ui/core/styles';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Snackbar from '@material-ui/core/Snackbar';
 import Grid from '@material-ui/core/Grid';
+import TodayIcon from '@material-ui/icons/Today';
 import axios from 'axios'
 import { Alert } from '@material-ui/lab';
 import { Typography } from '@material-ui/core'
-import LinearProgress from '../ui/LinearProgress'
+import LinearProgress from './LinearProgress'
 import url from '../../utils/url.js'
-import AutocompleteConsultant from './AutocompleteConsultant'
-import SelectClient from './SelectClient'
+import AutocompleteConsultantNew from './AutocompleteConsultantNew'
+import SelectClientNew from './SelectClientNew'
+import DateMomentUtils from '@date-io/moment'
+import "moment/locale/es"
+import {
+    MuiPickersUtilsProvider,
+    DatePicker,
+} from '@material-ui/pickers';
+moment.locale("es")
 
 
 const useStyles = makeStyles(theme => ({
@@ -36,43 +45,30 @@ const useStyles = makeStyles(theme => ({
 
 const error = false
 
-export default function DialogAssignment({ assignments }) {
+export default function DialogAssignmentNew({ assignments }) {
 
     const classes = useStyles();
     const [dialogOpen, setDialogOpen] = useState(false);
-    const [snackbarOpen, setSnackbarOpen] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState('');
     const [loading, setLoading] = useState(true)
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+    const [consultants, setConsultant] = useState("")
     const [assignment, setAssignment] = useState({
-        consultantName: "",
-        client: "",
-        nameAssignment: "",
+        clientId: "",
+        name: "",
         percentage: "",
-        startDate: "",
-        endDate: "",
         comment: "",
     })
 
-    //get array Consultants
-    const seen = new Set()
-    const arrayConsultants = assignments.reduce((acc, value) => {
-        acc = value.Users.concat(acc)
-        return acc
-    }, []).filter(item => {
-        const duplicate = seen.has(item.id)
-        seen.add(item.id)
-        return !duplicate
-    })
-
     //get array Clients
-    const arrayClients = assignments.map(item => item.Client.name)
+    //const arrayClients = assignments.map(item => item.Client.name)
+    const arrayClients = [...new Set(assignments.map(item => item.Client.name))]
 
-
-    const { consultantName, client, nameAssignment, percentage, startDate, endDate, comment } = assignment
+    const { clientId, name, percentage, comment } = assignment
 
     const onChange = e => setAssignment({ ...assignment, [e.target.name]: e.target.value })
 
-    console.log(consultantName, client, nameAssignment, percentage, startDate, endDate, comment)
+    console.log(clientId, name, percentage, startDate, endDate, comment)
 
     const onDialogOpen = () => {
         setDialogOpen(true);
@@ -81,24 +77,29 @@ export default function DialogAssignment({ assignments }) {
     const onDialogClose = () => {
         setDialogOpen(false)
         setAssignment({
-            consultantName: "",
-            client: "",
-            nameAssignment: "",
+            clientId: "",
+            name: "",
             percentage: "",
-            startDate: "",
-            endDate: "",
             comment: "",
         })
     }
 
-    const onSnackbarClose = (e, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
+    const onCreate = async (e) => {
+        e.preventDefault()
+        const body = assignment
+        body.consultants = consultants
+        body.start_date = moment(startDate).format("YYYY-MM-DD")
+        body.end_date = moment(endDate).format("YYYY-MM-DD")
 
-        setSnackbarOpen(false);
-        setSnackbarMessage('');
-    };
+        try {
+            await axios.post(`${url.apiBaseUrl}/assignments`, body)
+            onDialogClose();
+            //setRefresh()
+
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
     // if (loading) return <LinearProgress />
 
@@ -107,7 +108,7 @@ export default function DialogAssignment({ assignments }) {
             <Button onClick={onDialogOpen} className={classes.botonElement} size="small" variant="contained" color="primary">New Assignment</Button>
 
             <Dialog open={dialogOpen} onClose={onDialogClose}>
-                <form className={classes.form} onSubmit={null} >
+                <form className={classes.form} onSubmit={onCreate} >
                     <DialogTitle>New Assignment</DialogTitle>
                     {error &&
                         <div className={classes.root}>
@@ -122,45 +123,62 @@ export default function DialogAssignment({ assignments }) {
                                     autoFocus
                                     margin="normal"
                                     label="Name Assignment"
-                                    InputProps={{ name: 'nameAssignment' }}
+                                    InputProps={{ name: 'name' }}
                                     onChange={onChange}
-                                    value={nameAssignment}
+                                    value={name}
                                     required
 
                                 />
                             </Grid>
 
                             <Grid item xs={6}>
-                                <SelectClient clients={arrayClients} client={client} onChange={onChange} />
+                                <SelectClientNew clients={arrayClients} client={clientId} onChange={onChange} />
                             </Grid>
                             <Grid item xs={6}>
-                                <TextField
-                                    className={classes.textField}
-                                    margin="normal"
-                                    label="Start Date"
-                                    InputProps={{ name: 'startDate' }}
-                                    onChange={onChange}
-                                    value={startDate}
-                                    required
-
-                                />
+                                <MuiPickersUtilsProvider utils={DateMomentUtils}>
+                                    <DatePicker
+                                        autoOk
+                                        disableToolbar
+                                        variant="inline"
+                                        format="DD/MM/YYYY"
+                                        margin="normal"
+                                        id="date-picker-inline1"
+                                        label="Fecha Fin"
+                                        name="startDate"
+                                        value={startDate}
+                                        onChange={setStartDate}
+                                        InputProps={{
+                                            name: "startDate",
+                                            endAdornment: (
+                                                <TodayIcon />
+                                            )
+                                        }} />
+                                </MuiPickersUtilsProvider>
 
                             </Grid>
                             <Grid item xs={6}>
-                                <TextField
-                                    className={classes.textField}
-                                    margin="normal"
-                                    label="End date"
-                                    InputProps={{ name: 'endDate' }}
-                                    onChange={onChange}
-                                    value={endDate}
-                                    required
-
-                                />
+                                <MuiPickersUtilsProvider utils={DateMomentUtils}>
+                                    <DatePicker
+                                        autoOk
+                                        disableToolbar
+                                        variant="inline"
+                                        format="DD/MM/YYYY"
+                                        margin="normal"
+                                        id="date-picker-inline2"
+                                        name="endDate"
+                                        label="Fecha Fin"
+                                        value={endDate}
+                                        onChange={setEndDate}
+                                        InputProps={{
+                                            endAdornment: (
+                                                <TodayIcon />
+                                            )
+                                        }} />
+                                </MuiPickersUtilsProvider>
 
                             </Grid>
                             <Grid item xs={12}>
-                                <AutocompleteConsultant consultants={arrayConsultants} />
+                                <AutocompleteConsultantNew setConsultant={setConsultant} />
                             </Grid>
                             <Grid item xs={6}>
                                 <TextField
@@ -205,12 +223,7 @@ export default function DialogAssignment({ assignments }) {
                     </DialogActions>
                 </form>
             </Dialog>
-            <Snackbar
-                open={snackbarOpen}
-                message={snackbarMessage}
-                onClose={onSnackbarClose}
-                autoHideDuration={4000}
-            />
+
         </>
     );
 }

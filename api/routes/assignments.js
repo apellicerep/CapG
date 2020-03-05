@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { User, Client, Assignment, } = require('../models')
+const { User, Client, Assignment, UserAssignment } = require('../models')
 const { body, validationResult } = require('express-validator')
 const { Op } = require("sequelize");
 
@@ -90,9 +90,11 @@ router.post('/', [
     body('end_date', 'Please introduce a end date').not().isEmpty(),
     body('end_date', 'Date format incorrect').isISO8601(),
     body('clientId', 'Please introduce a client Id').not().isEmpty(),
-    body('clientId', 'Must be an Integer').isInt()
+    body('clientId', 'Must be an Integer').isInt(),
+    body('consultants', 'Please introduce consultants').not().isEmpty()
 ],
     asyncHandler(async (req, res, next) => {
+        console.log(req.body)
 
         const errors = validationResult(req);
 
@@ -100,11 +102,13 @@ router.post('/', [
             return res.status(400).json({ errors: errors.array() });
         }
         const { consultants } = req.body
+
         delete req.body.consultants
         console.log(Object.keys(Assignment.prototype))
         try {
             const asign = await Assignment.create(req.body)
-            await asign.addUser(consultants)
+            await asign.addUser(consultants.map(i => i.id))
+            // await asign.addUser(consultants, { through: { nameAssignment: name, nameConsultant: "inventado" } })
             res.status(201).end()
         } catch (error) {
 
@@ -126,7 +130,8 @@ router.put('/:id', [
     body('end_date', 'Please introduce a end date').not().isEmpty(),
     body('end_date', 'Date format incorrect').isISO8601(),
     body('clientId', 'Please introduce a client Id').not().isEmpty(),
-    body('clientId', 'Must be an Integer').isInt()
+    body('clientId', 'Must be an Integer').isInt(),
+    body('consultants', 'Please introduce consultants').not().isEmpty()
 ],
     asyncHandler(async (req, res, next) => {
 
@@ -137,7 +142,19 @@ router.put('/:id', [
         const assignment = await Assignment.findByPk(req.params.id)
         if (assignment) {
             try {
+                const { consultants } = req.body
+                delete req.body.consultants
                 await assignment.update(req.body)
+                const test = await assignment.getUsers()
+                await assignment.removeUsers(test)
+                console.log(test)
+                // await assignment.save()
+                // await assignment.addUser(consultants)
+                //const userAssignment = consultants.map(i => ({ AssignmentId: req.params.id, UserId: i }))
+                //await UserAssignment.bulkCreate(userAssignment)
+                await UserAssignment.create({ Assignment: req.params.id, UserId: 1 })
+                //console.log(Object.keys(Assignment.prototype))
+                // //await assignment.addUsers(consultants)
                 res.status(204).end()
             } catch (error) {
                 if (error.name === "SequelizeUniqueConstraintError") {

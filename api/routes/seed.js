@@ -22,17 +22,17 @@ router.get('/', asyncHandler(async (req, res) => {
         { name: "Arturo", surname: "Ideamas", email: "arturo@gmail.com", isManager: 0 },
         { name: "Joaquim", surname: "Allems", email: "joaq@gmail.com", isManager: 0 }
     ])
-    const clients = await Client.bulkCreate([
+    await Client.bulkCreate([
         { name: "Ikea", contactName: "John", contactEmail: "ikea@gmail.com", contactPhone: "0046111111" },
         { name: "Seb", contactName: "Markus", contactEmail: "markus@gmail.com", contactPhone: "0046222222" },
         { name: "Ica", contactName: "Adolf", contactEmail: "adolf@gmail.com", contactPhone: "0046333333" }
     ])
-    const assign = await Assignment.bulkCreate([
+    await Assignment.bulkCreate([
         { name: "T&M", start_date: "2020-03-09", end_date: "2020-03-16", clientId: 1 },
         { name: "Payments", start_date: "2020-03-17", end_date: "2020-03-24", clientId: 2 },
         { name: "Public web", start_date: "2020-03-17", end_date: "2020-04-23", clientId: 3 }
     ])
-    const userAssign = await UserAssignment.bulkCreate([
+    await UserAssignment.bulkCreate([
         { AssignmentId: 1, UserId: 1 },
         { AssignmentId: 1, UserId: 2 },
         { AssignmentId: 2, UserId: 1 },
@@ -41,7 +41,17 @@ router.get('/', asyncHandler(async (req, res) => {
         { AssignmentId: 2, UserId: 6 },
         { AssignmentId: 2, UserId: 4 },
         { AssignmentId: 3, UserId: 5 },
+
     ])
+
+    // { AssignmentId: 1, UserId: 1, nameAssignment: "T&M", nameConsultant: "Pepe" },
+    // { AssignmentId: 1, UserId: 2, nameAssignment: "T&M", nameConsultant: "Juan" },
+    // { AssignmentId: 2, UserId: 1, nameAssignment: "Payments", nameConsultant: "Pepe" },
+    // { AssignmentId: 3, UserId: 3, nameAssignment: "Public web", nameConsultant: "Laura" },
+    // { AssignmentId: 3, UserId: 1, nameAssignment: "Public web", nameConsultant: "Pepe" },
+    // { AssignmentId: 2, UserId: 6, nameAssignment: "T&M", nameConsultant: "Joaquim" },
+    // { AssignmentId: 2, UserId: 4, nameAssignment: "T&M", nameConsultant: "Maria" },
+    // { AssignmentId: 3, UserId: 5, nameAssignment: "Public web", nameConsultant: "Arturo" },
     const managed1 = await User.findByPk(1)
     const managed2 = await User.findByPk(2)
     const managed3 = await User.findByPk(3)

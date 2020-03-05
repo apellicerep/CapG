@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import SearchBar from '../ui/SearchBar'
-import DialogAssignment from '../ui/DialogAssignment'
+import DialogAssignmentNew from './DialogAssignmentNew'
 
 
 const useStyles = makeStyles(theme => ({
@@ -44,6 +44,7 @@ export default function Main() {
 
     const buscador = value => setSearch(value)
 
+
     const assignmentsFiltered = (search !== "") ?
         assignments.filter(item => (item.name.toLowerCase().includes(search.toLowerCase())) ||
             (item.Client.name.toLowerCase().includes(search.toLocaleLowerCase())) ? true : false)
@@ -55,7 +56,7 @@ export default function Main() {
     return (
         <Container maxWidth="md" disableGutters={true}>
             <SearchBar buscador={buscador} search={search} />
-            <DialogAssignment assignments={assignments} />
+            <DialogAssignmentNew assignments={assignments} />
             <List
                 component="nav"
                 aria-labelledby="nested-list-subheader"

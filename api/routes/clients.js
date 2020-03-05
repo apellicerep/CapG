@@ -16,11 +16,11 @@ function asyncHandler(cb) {
 const manager = 5
 router.get('/', asyncHandler(async (req, res) => {
 
-    const clients = await Client.findAll({
+    const clientes = await Client.findAll({
         attributes: ['id', 'name']
     })
-    console.log(clients)
-    res.json({ data: clients })
+    console.log(clientes)
+    res.json({ data: clientes })
 }))
 
 module.exports = router
