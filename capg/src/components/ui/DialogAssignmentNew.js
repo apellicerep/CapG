@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(2)
     },
     textField: {
-        margin: theme.spacing(1),
+        //margin: theme.spacing(1),
         width: 200,
     },
     root: {
@@ -40,12 +40,15 @@ const useStyles = makeStyles(theme => ({
         '& > * + *': {
             marginTop: theme.spacing(2),
         },
+    },
+    margin: {
+        marginBottom: theme.spacing(2)
     }
 }))
 
 const error = false
 
-export default function DialogAssignmentNew({ assignments }) {
+export default function DialogAssignmentNew({ assignments, setRefresh }) {
 
     const classes = useStyles();
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -94,7 +97,7 @@ export default function DialogAssignmentNew({ assignments }) {
         try {
             await axios.post(`${url.apiBaseUrl}/assignments`, body)
             onDialogClose();
-            //setRefresh()
+            setRefresh()
 
         } catch (err) {
             console.log(err)
@@ -106,7 +109,6 @@ export default function DialogAssignmentNew({ assignments }) {
     return (
         <>
             <Button onClick={onDialogOpen} className={classes.botonElement} size="small" variant="contained" color="primary">New Assignment</Button>
-
             <Dialog open={dialogOpen} onClose={onDialogClose}>
                 <form className={classes.form} onSubmit={onCreate} >
                     <DialogTitle>New Assignment</DialogTitle>
@@ -117,7 +119,7 @@ export default function DialogAssignmentNew({ assignments }) {
                     }
                     <DialogContent className={classes.dialog}>
                         <Grid container>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={6} md={6}>
                                 <TextField
                                     className={classes.textField}
                                     autoFocus
@@ -131,10 +133,10 @@ export default function DialogAssignmentNew({ assignments }) {
                                 />
                             </Grid>
 
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={6} md={6}>
                                 <SelectClientNew clients={arrayClients} client={clientId} onChange={onChange} />
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid className={classes.margin} item xs={12} sm={6} md={6}>
                                 <MuiPickersUtilsProvider utils={DateMomentUtils}>
                                     <DatePicker
                                         autoOk
@@ -143,7 +145,7 @@ export default function DialogAssignmentNew({ assignments }) {
                                         format="DD/MM/YYYY"
                                         margin="normal"
                                         id="date-picker-inline1"
-                                        label="Fecha Fin"
+                                        label="Start date"
                                         name="startDate"
                                         value={startDate}
                                         onChange={setStartDate}
@@ -156,7 +158,7 @@ export default function DialogAssignmentNew({ assignments }) {
                                 </MuiPickersUtilsProvider>
 
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={6} md={6}>
                                 <MuiPickersUtilsProvider utils={DateMomentUtils}>
                                     <DatePicker
                                         autoOk
@@ -166,7 +168,7 @@ export default function DialogAssignmentNew({ assignments }) {
                                         margin="normal"
                                         id="date-picker-inline2"
                                         name="endDate"
-                                        label="Fecha Fin"
+                                        label="End date"
                                         value={endDate}
                                         onChange={setEndDate}
                                         InputProps={{
@@ -177,10 +179,10 @@ export default function DialogAssignmentNew({ assignments }) {
                                 </MuiPickersUtilsProvider>
 
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={12} sm={6} md={6}>
                                 <AutocompleteConsultantNew setConsultant={setConsultant} />
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={6} md={6}>
                                 <TextField
                                     className={classes.textField}
                                     margin="normal"
@@ -192,7 +194,7 @@ export default function DialogAssignmentNew({ assignments }) {
                                 />
 
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={6} md={6} >
                                 <TextField
                                     className={classes.textField}
                                     margin="normal"

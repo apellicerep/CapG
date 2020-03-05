@@ -7,7 +7,6 @@ module.exports = (sequelize) => {
         name: {
             type: Sequelize.STRING,
             allowNull: false,
-            unique: true,
         },
         percentage: {
             type: Sequelize.INTEGER,

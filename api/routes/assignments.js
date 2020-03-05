@@ -139,6 +139,7 @@ router.put('/:id', [
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
+        console.log(req.body)
         const assignment = await Assignment.findByPk(req.params.id)
         if (assignment) {
             try {
@@ -147,14 +148,7 @@ router.put('/:id', [
                 await assignment.update(req.body)
                 const test = await assignment.getUsers()
                 await assignment.removeUsers(test)
-                console.log(test)
-                // await assignment.save()
-                // await assignment.addUser(consultants)
-                //const userAssignment = consultants.map(i => ({ AssignmentId: req.params.id, UserId: i }))
-                //await UserAssignment.bulkCreate(userAssignment)
-                await UserAssignment.create({ Assignment: req.params.id, UserId: 1 })
-                //console.log(Object.keys(Assignment.prototype))
-                // //await assignment.addUsers(consultants)
+                await assignment.addUser(consultants.map(i => i.id))
                 res.status(204).end()
             } catch (error) {
                 if (error.name === "SequelizeUniqueConstraintError") {

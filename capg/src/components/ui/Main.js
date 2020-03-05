@@ -39,8 +39,11 @@ export default function Main() {
     useEffect(() => {
         fecthAssignments()
         // eslint-disable-next-line
-    }, []);
+    }, [loading]);
 
+    function setRefresh() {
+        setLoading(true)
+    }
 
     const buscador = value => setSearch(value)
 
@@ -56,14 +59,14 @@ export default function Main() {
     return (
         <Container maxWidth="md" disableGutters={true}>
             <SearchBar buscador={buscador} search={search} />
-            <DialogAssignmentNew assignments={assignments} />
+            <DialogAssignmentNew setRefresh={setRefresh} assignments={assignments} />
             <List
                 component="nav"
                 aria-labelledby="nested-list-subheader"
                 subheader={
                     <ListSubheader component="div" id="nested-list-subheader">
-                        Assignments:
-                        </ListSubheader>
+
+                    </ListSubheader>
                 }
                 className={classes.root}
             >

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
@@ -18,7 +18,8 @@ import { IconButton } from '@material-ui/core';
 import DateLinearProgress from './DateLinearProgress'
 import Typography from '@material-ui/core/Typography'
 import ConsultantChip from '../ui/ConsultantChip'
-import MoreVertMenu from '../ui/MoreVertMenu'
+//import MoreVertMenu from '../ui/MoreVertMenu'
+import DialogAssignmentEdit from './DialogAssignmentEdit'
 
 
 const useStyles = makeStyles(theme => ({
@@ -38,7 +39,9 @@ const useStyles = makeStyles(theme => ({
     nested2: {
         paddingLeft: theme.spacing(3),
         overflowWrap: 'break-word',
-        paddingRight: theme.spacing(5)
+        paddingRight: theme.spacing(5),
+        display: 'block',
+        marginBottom: theme.spacing(4)
     },
     item: {
         marginBottom: theme.spacing(2)
@@ -51,7 +54,7 @@ const useStyles = makeStyles(theme => ({
         fontSize: '0.8rem'
     },
     listItem: {
-        marginBottom: theme.spacing(3)
+        marginBottom: theme.spacing(1)
     }
 }));
 
@@ -99,17 +102,19 @@ export default function Assignment({ item, index }) {
                     </Grid>
                 </>
                 <ListItemIcon >
-                    <MoreVertMenu />
+                    {/* <MoreVertMenu itemId={item.id} /> */}
+                    <DialogAssignmentEdit itemId={item.id} />
                 </ListItemIcon>
             </ListItem>
             <Collapse in={(index === 0) ? !open : open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
+                    <ListItemText className={classes.nested} secondary="Consultants:"></ListItemText>
                     <ListItem className={classes.nested}>
-
                         {item.Users.map(user => <ConsultantChip key={user.id} name={`${user.name} ${user.surname}`} />)}
                     </ListItem>
                     <ListItem className={classes.nested2}>
-                        <ListItemText primary='Comments:' secondary={item.comment} />
+                        <ListItemText secondary='Comments:' />
+                        <ListItemText primary={item.comment} />
                     </ListItem>
                 </List>
             </Collapse>

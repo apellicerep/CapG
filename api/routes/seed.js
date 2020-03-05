@@ -38,20 +38,11 @@ router.get('/', asyncHandler(async (req, res) => {
         { AssignmentId: 2, UserId: 1 },
         { AssignmentId: 3, UserId: 3 },
         { AssignmentId: 3, UserId: 1 },
-        { AssignmentId: 2, UserId: 6 },
         { AssignmentId: 2, UserId: 4 },
         { AssignmentId: 3, UserId: 5 },
 
     ])
 
-    // { AssignmentId: 1, UserId: 1, nameAssignment: "T&M", nameConsultant: "Pepe" },
-    // { AssignmentId: 1, UserId: 2, nameAssignment: "T&M", nameConsultant: "Juan" },
-    // { AssignmentId: 2, UserId: 1, nameAssignment: "Payments", nameConsultant: "Pepe" },
-    // { AssignmentId: 3, UserId: 3, nameAssignment: "Public web", nameConsultant: "Laura" },
-    // { AssignmentId: 3, UserId: 1, nameAssignment: "Public web", nameConsultant: "Pepe" },
-    // { AssignmentId: 2, UserId: 6, nameAssignment: "T&M", nameConsultant: "Joaquim" },
-    // { AssignmentId: 2, UserId: 4, nameAssignment: "T&M", nameConsultant: "Maria" },
-    // { AssignmentId: 3, UserId: 5, nameAssignment: "Public web", nameConsultant: "Arturo" },
     const managed1 = await User.findByPk(1)
     const managed2 = await User.findByPk(2)
     const managed3 = await User.findByPk(3)

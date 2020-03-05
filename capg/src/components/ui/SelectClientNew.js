@@ -21,6 +21,7 @@ export default function SelectClientNew({ client, onChange }) {
     const classes = useStyles();
     const [clients, setClients] = useState([])
     const [loading, setLoading] = useState(true)
+    console.log(client)
 
 
     const fetchClients = async () => {
