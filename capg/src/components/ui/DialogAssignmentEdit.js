@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import moment from "moment"
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -7,7 +7,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import { makeStyles } from '@material-ui/core/styles';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Snackbar from '@material-ui/core/Snackbar';
 import Grid from '@material-ui/core/Grid';
 import TodayIcon from '@material-ui/icons/Today';
 import EditIcon from '@material-ui/icons/Edit';
@@ -15,11 +14,11 @@ import IconButton from '@material-ui/core/IconButton';
 import axios from 'axios'
 import { Alert } from '@material-ui/lab';
 import { Typography } from '@material-ui/core'
-import LinearProgress from './LinearProgress'
 import url from '../../utils/url.js'
 import AutocompleteConsultantNew from './AutocompleteConsultantNew'
 import SelectClientNew from './SelectClientNew'
 import DateMomentUtils from '@date-io/moment'
+
 import "moment/locale/es"
 import {
     MuiPickersUtilsProvider,
@@ -50,7 +49,7 @@ const useStyles = makeStyles(theme => ({
 
 const error = false
 
-export default function DialogAssignmentEdit({ itemId }) {
+export default function DialogAssignmentEdit({ itemId, setRefresh }) {
 
     const classes = useStyles();
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -77,15 +76,6 @@ export default function DialogAssignmentEdit({ itemId }) {
         }
     }
 
-    // useEffect(() => {
-    //     //fecthAssignment()
-    //     // eslint-disable-next-line
-    // }, [dialogOpen]);
-
-    //get array Clients
-    //const arrayClients = assignment.map(item => item.Client.name)
-    //const arrayClients = [...new Set(assignments.map(item => item.Client.name))]
-
     const { clientId, name, percentage, comment } = assignment
 
     const onChange = e => setAssignment({ ...assignment, [e.target.name]: e.target.value })
@@ -107,6 +97,17 @@ export default function DialogAssignmentEdit({ itemId }) {
         })
     }
 
+    const onDelete = async (e) => {
+        try {
+            await axios.delete(`${url.apiBaseUrl}/assignments/${itemId}`)
+            onDialogClose();
+            setRefresh()
+
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
     const onUpdate = async (e) => {
         e.preventDefault()
         const body = assignment
@@ -117,7 +118,7 @@ export default function DialogAssignmentEdit({ itemId }) {
         try {
             await axios.put(`${url.apiBaseUrl}/assignments/${itemId}`, body)
             onDialogClose();
-            //setRefresh()
+            setRefresh()
 
         } catch (err) {
             console.log(err)
@@ -128,7 +129,6 @@ export default function DialogAssignmentEdit({ itemId }) {
 
     return (
         <>
-            {/* <Button onClick={onDialogOpen} className={classes.botonElement} size="small" variant="contained" color="primary">New Assignment</Button> */}
             <IconButton onClick={onDialogOpen} aria-label="delete"><EditIcon /></IconButton>
             {!loading &&
                 <Dialog open={dialogOpen} onClose={onDialogClose}>
@@ -228,42 +228,27 @@ export default function DialogAssignmentEdit({ itemId }) {
 
                                 </Grid>
 
-
-
                             </Grid>
                         </DialogContent>
-                        {/* <DialogActions>
-                        <Button onClick={onDialogClose} color="primary">
-                            Cancel
-          </Button>
-                        <Button
-                            variant="contained"
-                            // onClick={onCreate}
-                            color="primary"
-                            type="submit"
-                        >
-                            Update
-          </Button>
-                    </DialogActions> */}
                         <DialogActions>
                             <Grid className={classes.container} container justify="space-between" >
                                 <Grid >
-                                    <Button onClick={null} variant="contained" color="secondary">
-                                        Eliminar
+                                    <Button onClick={onDelete} variant="contained" color="secondary">
+                                        Delete
                             </Button>
                                 </Grid>
                                 <Grid >
                                     <Button onClick={onDialogClose} color="primary">
-                                        Cancelar
-                    </Button>
+                                        Cancel
+                            </Button>
                                     <Button
                                         variant="contained"
                                         // onClick={onCreate}
                                         color="primary"
                                         type="submit"
                                     >
-                                        Actualizar
-                    </Button>
+                                        Update
+                            </Button>
                                 </Grid>
                             </Grid>
                         </DialogActions>

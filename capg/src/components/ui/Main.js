@@ -70,7 +70,7 @@ export default function Main() {
                 }
                 className={classes.root}
             >
-                {assignmentsFiltered.map((item, index) => <Assignment index={index} key={item.id} item={item} />)}
+                {assignmentsFiltered.map((item, index) => <Assignment setRefresh={setRefresh} index={index} key={item.id} item={item} />)}
             </List>
         </Container>
     )

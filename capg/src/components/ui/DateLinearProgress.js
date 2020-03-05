@@ -1,8 +1,9 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { lighten, makeStyles, withStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
+import moment from "moment"
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -17,11 +18,29 @@ const useStyles = makeStyles(theme => ({
         color: 'grey',
         fontSize: '0.8rem',
         display: 'block'
-    }
+    },
+    spanAssAlarm: {
+        color: '#ff002b',
+        fontWeight: 'bold'
+    },
+    color: {
+        textColor: "black"
+    },
 }));
 
-export default function LinearDeterminate({ prog, startDate, endDate }) {
+
+
+// '#ff6c5c'
+
+// rojo y amarillo
+// '#ff002b' : '#FFBA60'
+export default function DateLianearProgress({ prog, startDate, endDate }) {
     const classes = useStyles();
+
+    //("moment", moment(endDate, "YYYY-MM-DD").fromNow());
+    const alarm = moment(endDate).diff(moment(new Date()), 'days') < 30 ? true : false
+    console.log(moment(endDate).diff(moment(new Date()), 'days'))
+    console.log(moment(endDate).diff(moment(new Date()), 'days') < 30 ? true : false)
 
     return (
         <div className={classes.root}>
@@ -35,18 +54,23 @@ export default function LinearDeterminate({ prog, startDate, endDate }) {
                         className={classes.spanAss}>
                         Start date:
                     </Typography>
-                    {startDate}
+                    <Typography >
+                        {moment(startDate).format("DD/MM/YYYY")}
+                    </Typography>
                 </Grid>
                 <Grid item>
                     <Typography component='span'
                         className={classes.spanAss}>
                         End date:
                     </Typography>
-                    {endDate}
+                    <Typography className={alarm ? classes.spanAssAlarm : null}>
+                        {moment(endDate).format("DD/MM/YYYY")}
+                    </Typography>
+
                 </Grid>
             </Grid>
 
-            <LinearProgress variant="determinate" value={prog} color="secondary" />
+            <LinearProgress className={classes.linia} variant="determinate" value={prog} color="secondary" />
             <Grid
                 container
                 justify="space-between"

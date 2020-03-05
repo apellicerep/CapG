@@ -20,6 +20,7 @@ import Typography from '@material-ui/core/Typography'
 import ConsultantChip from '../ui/ConsultantChip'
 //import MoreVertMenu from '../ui/MoreVertMenu'
 import DialogAssignmentEdit from './DialogAssignmentEdit'
+import moment from "moment"
 
 
 const useStyles = makeStyles(theme => ({
@@ -58,14 +59,13 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function Assignment({ item, index }) {
+export default function Assignment({ item, index, setRefresh }) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 
     const handleClick = () => {
         setOpen(!open);
     };
-
     return (
         <>
             <ListItem className={classes.listItem} component='div'>
@@ -102,8 +102,7 @@ export default function Assignment({ item, index }) {
                     </Grid>
                 </>
                 <ListItemIcon >
-                    {/* <MoreVertMenu itemId={item.id} /> */}
-                    <DialogAssignmentEdit itemId={item.id} />
+                    <DialogAssignmentEdit setRefresh={setRefresh} itemId={item.id} />
                 </ListItemIcon>
             </ListItem>
             <Collapse in={(index === 0) ? !open : open} timeout="auto" unmountOnExit>
