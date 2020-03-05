@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
     },
     textField: {
         //margin: theme.spacing(1),
-        width: 200,
+        width: 200
     },
     root: {
         width: '100%',
@@ -140,7 +140,10 @@ export default function DialogAssignmentEdit({ itemId, setRefresh }) {
                             </div>
                         }
                         <DialogContent className={classes.dialog}>
-                            <Grid container>
+                            <Grid container
+                                direction="row"
+                                justify="space-between"
+                                alignItems="center">
                                 <Grid item xs={12} sm={6} md={6}>
                                     <TextField
                                         className={classes.textField}

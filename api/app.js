@@ -17,7 +17,7 @@ const assignmentRouter = require('./routes/assignments')
 const clientRouter = require('./routes/clients')
 const userRouter = require('./routes/users')
 const seedRouter = require('./routes/seed')
-
+const authRouter = require('./routes/auth')
 //use cors
 app.use(cors({
     exposedHeaders: ['location'] //expongo la cabecera location para que cuando responda en una de mis rutas con location el front end pueda coger esa direccion por ejemplo
@@ -34,6 +34,7 @@ app.use('/api/assignments', assignmentRouter)
 app.use('/api/clients', clientRouter)
 app.use('/api/users', userRouter)
 app.use('/api/seed', seedRouter)
+app.use('/api/auth', authRouter)
 
 ////Production
 // app.get('/*', function(req, res) {
