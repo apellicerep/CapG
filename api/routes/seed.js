@@ -2,6 +2,14 @@ const express = require('express')
 const router = express.Router()
 const { User, Client, UserAssignment, Assignment, ConsultantManager } = require('../models')
 
+
+// *************************************
+// *************************************
+//         DEVELOPMENT PURPOSE
+// *************************************
+// *************************************
+
+
 /* Handler function to wrap each route. */
 function asyncHandler(cb) {
     return async (req, res, next) => {

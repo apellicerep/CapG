@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -9,6 +9,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { Container } from '@material-ui/core';
+import AuthContext from '../context/auth/authContext'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -23,7 +24,9 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function Header2() {
+export default function Header2({ userName }) {
+    const authContext = useContext(AuthContext)
+    const { logout } = authContext
     const classes = useStyles();
     const [auth, setAuth] = React.useState(true);
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -41,6 +44,12 @@ export default function Header2() {
         setAnchorEl(null);
     };
 
+    const handleLogOut = () => {
+        logout()
+        setAnchorEl(null);
+
+    }
+
     return (
         <div className={classes.root}>
             <AppBar position="static">
@@ -52,6 +61,7 @@ export default function Header2() {
           </Typography>
                     {auth && (
                         <div>
+                            {userName}
                             <IconButton
                                 aria-label="account of current user"
                                 aria-controls="menu-appbar"
@@ -61,6 +71,7 @@ export default function Header2() {
                             >
                                 <AccountCircle />
                             </IconButton>
+
                             <Menu
                                 id="menu-appbar"
                                 anchorEl={anchorEl}
@@ -76,8 +87,8 @@ export default function Header2() {
                                 open={open}
                                 onClose={handleClose}
                             >
-                                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                                <MenuItem onClick={handleClose}>My account</MenuItem>
+
+                                <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
                             </Menu>
                         </div>
                     )}

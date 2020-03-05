@@ -22,7 +22,7 @@ module.exports = (sequelize) => {
         },
         comment: {
             type: Sequelize.STRING,
-            allowNull: true
+            defaultValue: ""
         }
     }, { sequelize });
 

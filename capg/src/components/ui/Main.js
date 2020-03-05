@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Container from '@material-ui/core/Container';
 import Assignment from '../ui/Assignment'
 import axios from 'axios'
@@ -9,6 +9,10 @@ import List from '@material-ui/core/List';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import SearchBar from '../ui/SearchBar'
 import DialogAssignmentNew from './DialogAssignmentNew'
+import Header2 from './Header2'
+import AuthContext from '../context/auth/authContext'
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid'
 
 
 const useStyles = makeStyles(theme => ({
@@ -17,9 +21,16 @@ const useStyles = makeStyles(theme => ({
         //maxWidth: 360,
         backgroundColor: theme.palette.background.paper,
     },
+    grey: {
+        color: 'grey',
+        marginLeft: theme.spacing(4)
+    }
 }));
 
 export default function Main() {
+    const authContext = useContext(AuthContext)
+    const { name, isAuthenticated } = authContext
+
     const classes = useStyles();
     const [assignments, setAssignments] = useState([])
     const [loading, setLoading] = useState(true)
@@ -28,7 +39,6 @@ export default function Main() {
     const fecthAssignments = async () => {
         try {
             const { data } = await axios.get(`${url.apiBaseUrl}/assignments`)
-            console.log(data.data)
             setAssignments(data.data)
             setLoading(false)
         } catch (err) {
@@ -37,9 +47,14 @@ export default function Main() {
     }
 
     useEffect(() => {
-        fecthAssignments()
+        authContext.loadUser()
         // eslint-disable-next-line
-    }, [loading]);
+    }, [])
+
+    useEffect(() => {
+        if (isAuthenticated) fecthAssignments()
+        // eslint-disable-next-line
+    }, [loading, isAuthenticated]);
 
     function setRefresh() {
         setLoading(true)
@@ -53,25 +68,51 @@ export default function Main() {
             (item.Client.name.toLowerCase().includes(search.toLocaleLowerCase())) ? true : false)
         : assignments
 
+
+    if (!isAuthenticated) return null
     if (loading) return <LinearProgress />
 
 
     return (
-        <Container maxWidth="md" disableGutters={true}>
-            <SearchBar buscador={buscador} search={search} />
-            <DialogAssignmentNew setRefresh={setRefresh} assignments={assignments} />
-            <List
-                component="nav"
-                aria-labelledby="nested-list-subheader"
-                subheader={
-                    <ListSubheader component="div" id="nested-list-subheader">
+        <>
+            <Header2 userName={name} />
 
-                    </ListSubheader>
+            <Container maxWidth="md" disableGutters={true}>
+                {assignments.length ?
+                    <>
+                        <Grid
+                            container
+                            direction="row"
+                            justify="flex-end"
+                            alignItems="center"
+                        >
+                            <Grid item  >
+                                <SearchBar buscador={buscador} search={search} />
+                            </Grid>
+                            <Grid item>
+                                <DialogAssignmentNew setRefresh={setRefresh} assignments={assignments} />
+                            </Grid>
+                        </Grid>
+                        <List
+                            component="nav"
+                            aria-labelledby="nested-list-subheader"
+                            subheader={
+                                <ListSubheader component="div" id="nested-list-subheader">
+
+                                </ListSubheader>
+                            }
+                            className={classes.root}
+                        >
+                            {assignmentsFiltered.map((item, index) => <Assignment setRefresh={setRefresh} index={index} key={item.id} item={item} />)}
+                        </List>
+                    </>
+                    :
+                    <Typography variant='h6' className={classes.grey}>
+                        Empty
+                    </Typography>
                 }
-                className={classes.root}
-            >
-                {assignmentsFiltered.map((item, index) => <Assignment setRefresh={setRefresh} index={index} key={item.id} item={item} />)}
-            </List>
-        </Container>
+            </Container>
+
+        </>
     )
 }

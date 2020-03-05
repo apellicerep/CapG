@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { User, Client, Assignment, UserAssignment } = require('../models')
 const { body, validationResult } = require('express-validator')
+const auth = require('../middleware/auth')
 const { Op } = require("sequelize");
 
 /* Handler function to wrap each route. */
@@ -15,21 +16,23 @@ function asyncHandler(cb) {
     }
 }
 
-const manager = 5
-router.get('/', asyncHandler(async (req, res) => {
+
+router.get('/', auth, asyncHandler(async (req, res) => {
 
     const userManaged = await User.findAll({
         attributes: ['id'],
         include: [{
             model: User,
             as: 'Manager',
-            where: { id: manager },
+            where: { id: req.currentUser.id },
             attributes: ['id', 'name'],
             through: {
                 attributes: []
             }
         }]
     })
+
+    if (!userManaged.length) return res.status(200).json({ data: [] })
 
     const arrayUsersManaged = userManaged.map(user => user.get({ plain: true }).id)
 
@@ -57,7 +60,7 @@ router.get('/', asyncHandler(async (req, res) => {
 
 }))
 
-router.get('/:id', asyncHandler(async (req, res) => {
+router.get('/:id', auth, asyncHandler(async (req, res) => {
 
     const assignment = await Assignment.findByPk(req.params.id, {
         attributes: {
@@ -82,7 +85,7 @@ router.get('/:id', asyncHandler(async (req, res) => {
 
 }))
 
-router.post('/', [
+router.post('/', auth, [
     body('name', 'Please introduce a name').not().isEmpty(),
     body('percentage', 'Please introduce a percentage').not().isEmpty(),
     body('start_date', 'Please introduce a start date').not().isEmpty(),
@@ -94,17 +97,13 @@ router.post('/', [
     body('consultants', 'Please introduce consultants').not().isEmpty()
 ],
     asyncHandler(async (req, res, next) => {
-        console.log(req.body)
 
         const errors = validationResult(req);
+        if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
         const { consultants } = req.body
-
         delete req.body.consultants
-        console.log(Object.keys(Assignment.prototype))
+        //console.log(Object.keys(Assignment.prototype))
         try {
             const asign = await Assignment.create(req.body)
             await asign.addUser(consultants.map(i => i.id))
@@ -122,7 +121,7 @@ router.post('/', [
         }
     }))
 
-router.put('/:id', [
+router.put('/:id', auth, [
     body('name', 'Please introduce a name').not().isEmpty(),
     body('percentage', 'Please introduce a percentage').not().isEmpty(),
     body('start_date', 'Please introduce a start date').not().isEmpty(),
@@ -139,7 +138,6 @@ router.put('/:id', [
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
-        console.log(req.body)
         const assignment = await Assignment.findByPk(req.params.id)
         if (assignment) {
             try {
@@ -164,7 +162,7 @@ router.put('/:id', [
         }
     }))
 
-router.delete('/:id', asyncHandler(async (req, res) => {
+router.delete('/:id', auth, asyncHandler(async (req, res) => {
 
     const assignment = await Assignment.findByPk(req.params.id)
     if (assignment) {

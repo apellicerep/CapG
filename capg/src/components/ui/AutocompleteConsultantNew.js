@@ -25,7 +25,6 @@ export default function AutocompleteConsultantNew({ setConsultant, consultantsDe
     const fetchConsultants = async () => {
         try {
             const { data } = await axios.get(`${url.apiBaseUrl}/users`)
-            console.log("consultant", data.data)
             setConsultants(data.data)
 
 
@@ -58,8 +57,8 @@ export default function AutocompleteConsultantNew({ setConsultant, consultantsDe
                     <TextField
                         {...params}
                         variant="standard"
-                        label="filterSelectedOptions"
-                        placeholder="Favorites"
+                        label="Choose consultants:"
+                        placeholder="Consultant"
                     />
                 )}
             />

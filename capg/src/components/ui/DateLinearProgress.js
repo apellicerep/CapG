@@ -39,8 +39,6 @@ export default function DateLianearProgress({ prog, startDate, endDate }) {
 
     //("moment", moment(endDate, "YYYY-MM-DD").fromNow());
     const alarm = moment(endDate).diff(moment(new Date()), 'days') < 30 ? true : false
-    console.log(moment(endDate).diff(moment(new Date()), 'days'))
-    console.log(moment(endDate).diff(moment(new Date()), 'days') < 30 ? true : false)
 
     return (
         <div className={classes.root}>

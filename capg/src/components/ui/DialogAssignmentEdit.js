@@ -18,6 +18,7 @@ import url from '../../utils/url.js'
 import AutocompleteConsultantNew from './AutocompleteConsultantNew'
 import SelectClientNew from './SelectClientNew'
 import DateMomentUtils from '@date-io/moment'
+import SelectPercentage from './SelectPercentage'
 
 import "moment/locale/es"
 import {
@@ -44,6 +45,9 @@ const useStyles = makeStyles(theme => ({
     },
     margin: {
         marginBottom: theme.spacing(2)
+    },
+    margin2: {
+        marginLeft: theme.spacing(2)
     }
 }))
 
@@ -63,7 +67,6 @@ export default function DialogAssignmentEdit({ itemId, setRefresh }) {
         const obj = {}
         try {
             const { data } = await axios.get(`${url.apiBaseUrl}/assignments/${itemId}`)
-            console.log(data.data)
             obj.clientId = data.data.Client.id
             obj.name = data.data.name
             obj.percentage = data.data.percentage
@@ -80,8 +83,6 @@ export default function DialogAssignmentEdit({ itemId, setRefresh }) {
 
     const onChange = e => setAssignment({ ...assignment, [e.target.name]: e.target.value })
 
-    console.log(clientId, name, percentage, startDate, endDate, comment)
-
     const onDialogOpen = () => {
         fecthAssignment()
         setDialogOpen(true);
@@ -93,7 +94,7 @@ export default function DialogAssignmentEdit({ itemId, setRefresh }) {
             clientId: "",
             name: "",
             percentage: "",
-            comment: "",
+            comment: " ",
         })
     }
 
@@ -133,7 +134,7 @@ export default function DialogAssignmentEdit({ itemId, setRefresh }) {
             {!loading &&
                 <Dialog open={dialogOpen} onClose={onDialogClose}>
                     <form className={classes.form} onSubmit={onUpdate} >
-                        <DialogTitle>New Assignment</DialogTitle>
+                        <DialogTitle>Update Assignment</DialogTitle>
                         {error &&
                             <div className={classes.root}>
                                 <Alert severity="error"><Typography variant="body2">{error}</Typography></Alert>
@@ -149,7 +150,7 @@ export default function DialogAssignmentEdit({ itemId, setRefresh }) {
                                         className={classes.textField}
                                         autoFocus
                                         margin="normal"
-                                        label="Name Assignment"
+                                        label="Name Assignment:"
                                         InputProps={{ name: 'name' }}
                                         onChange={onChange}
                                         value={name}
@@ -170,7 +171,7 @@ export default function DialogAssignmentEdit({ itemId, setRefresh }) {
                                             format="DD/MM/YYYY"
                                             margin="normal"
                                             id="date-picker-inline1"
-                                            label="Start date"
+                                            label="Start date:"
                                             name="startDate"
                                             value={startDate}
                                             onChange={setStartDate}
@@ -193,7 +194,7 @@ export default function DialogAssignmentEdit({ itemId, setRefresh }) {
                                             margin="normal"
                                             id="date-picker-inline2"
                                             name="endDate"
-                                            label="End date"
+                                            label="End date:"
                                             value={endDate}
                                             onChange={setEndDate}
                                             InputProps={{
@@ -208,22 +209,13 @@ export default function DialogAssignmentEdit({ itemId, setRefresh }) {
                                     <AutocompleteConsultantNew consultantsDefault={consultants} setConsultant={setConsultant} />
                                 </Grid>
                                 <Grid item xs={12} sm={6} md={6}>
-                                    <TextField
-                                        className={classes.textField}
-                                        margin="normal"
-                                        label="Percentage"
-                                        InputProps={{ name: 'percentage' }}
-                                        onChange={onChange}
-                                        value={percentage}
-
-                                    />
-
+                                    <SelectPercentage percentage={percentage} onChange={onChange} />
                                 </Grid>
                                 <Grid item xs={12} sm={6} md={6} >
                                     <TextField
                                         className={classes.textField}
                                         margin="normal"
-                                        label="Comment"
+                                        label="Comment:"
                                         InputProps={{ name: 'comment' }}
                                         onChange={onChange}
                                         value={comment}
@@ -238,20 +230,21 @@ export default function DialogAssignmentEdit({ itemId, setRefresh }) {
                                 <Grid >
                                     <Button onClick={onDelete} variant="contained" color="secondary">
                                         Delete
-                            </Button>
+                                     </Button>
                                 </Grid>
                                 <Grid >
                                     <Button onClick={onDialogClose} color="primary">
                                         Cancel
-                            </Button>
+                                    </Button>
                                     <Button
                                         variant="contained"
                                         // onClick={onCreate}
                                         color="primary"
                                         type="submit"
+                                        className={classes.margin2}
                                     >
                                         Update
-                            </Button>
+                                    </Button>
                                 </Grid>
                             </Grid>
                         </DialogActions>

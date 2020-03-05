@@ -55,7 +55,7 @@ const useStyles = makeStyles(theme => ({
         fontSize: '0.8rem'
     },
     listItem: {
-        marginBottom: theme.spacing(1)
+        marginBottom: theme.spacing(3)
     }
 }));
 

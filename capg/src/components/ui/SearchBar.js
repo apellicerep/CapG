@@ -11,6 +11,7 @@ const usePaperStyles = makeStyles(theme => ({
         display: 'flex',
         alignItems: 'center',
         width: '16rem',
+        // width: '100%',
         margin: theme.spacing(2)
     },
     input: {

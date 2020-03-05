@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { Client } = require('../models')
+const auth = require('../middleware/auth')
 
 /* Handler function to wrap each route. */
 function asyncHandler(cb) {
@@ -13,13 +14,12 @@ function asyncHandler(cb) {
     }
 }
 
-const manager = 5
-router.get('/', asyncHandler(async (req, res) => {
+
+router.get('/', auth, asyncHandler(async (req, res) => {
 
     const clientes = await Client.findAll({
         attributes: ['id', 'name']
     })
-    console.log(clientes)
     res.json({ data: clientes })
 }))
 

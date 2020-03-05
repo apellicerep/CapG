@@ -16,6 +16,7 @@ import { Typography } from '@material-ui/core'
 import LinearProgress from './LinearProgress'
 import url from '../../utils/url.js'
 import AutocompleteConsultantNew from './AutocompleteConsultantNew'
+import SelectPercentage from './SelectPercentage'
 import SelectClientNew from './SelectClientNew'
 import DateMomentUtils from '@date-io/moment'
 import "moment/locale/es"
@@ -29,7 +30,8 @@ moment.locale("es")
 const useStyles = makeStyles(theme => ({
 
     botonElement: {
-        margin: theme.spacing(2)
+        margin: theme.spacing(2),
+        borderRadius: '20%'
     },
     textField: {
         //margin: theme.spacing(1),
@@ -71,8 +73,6 @@ export default function DialogAssignmentNew({ assignments, setRefresh }) {
 
     const onChange = e => setAssignment({ ...assignment, [e.target.name]: e.target.value })
 
-    console.log(clientId, name, percentage, startDate, endDate, comment)
-
     const onDialogOpen = () => {
         setDialogOpen(true);
     };
@@ -108,7 +108,7 @@ export default function DialogAssignmentNew({ assignments, setRefresh }) {
 
     return (
         <>
-            <Button onClick={onDialogOpen} className={classes.botonElement} size="small" variant="contained" color="primary">New Assignment</Button>
+            <Button onClick={onDialogOpen} className={classes.botonElement} size="small" variant="contained" color="primary">+</Button>
             <Dialog open={dialogOpen} onClose={onDialogClose}>
                 <form className={classes.form} onSubmit={onCreate} >
                     <DialogTitle>New Assignment</DialogTitle>
@@ -124,7 +124,7 @@ export default function DialogAssignmentNew({ assignments, setRefresh }) {
                                     className={classes.textField}
                                     autoFocus
                                     margin="normal"
-                                    label="Name Assignment"
+                                    label="Name Assignment:"
                                     InputProps={{ name: 'name' }}
                                     onChange={onChange}
                                     value={name}
@@ -145,7 +145,7 @@ export default function DialogAssignmentNew({ assignments, setRefresh }) {
                                         format="DD/MM/YYYY"
                                         margin="normal"
                                         id="date-picker-inline1"
-                                        label="Start date"
+                                        label="Start date:"
                                         name="startDate"
                                         value={startDate}
                                         onChange={setStartDate}
@@ -168,7 +168,7 @@ export default function DialogAssignmentNew({ assignments, setRefresh }) {
                                         margin="normal"
                                         id="date-picker-inline2"
                                         name="endDate"
-                                        label="End date"
+                                        label="End date:"
                                         value={endDate}
                                         onChange={setEndDate}
                                         InputProps={{
@@ -183,22 +183,14 @@ export default function DialogAssignmentNew({ assignments, setRefresh }) {
                                 <AutocompleteConsultantNew setConsultant={setConsultant} />
                             </Grid>
                             <Grid item xs={12} sm={6} md={6}>
-                                <TextField
-                                    className={classes.textField}
-                                    margin="normal"
-                                    label="Percentage"
-                                    InputProps={{ name: 'percentage' }}
-                                    onChange={onChange}
-                                    value={percentage}
-
-                                />
+                                <SelectPercentage percentage={percentage} onChange={onChange} />
 
                             </Grid>
                             <Grid item xs={12} sm={6} md={6} >
                                 <TextField
                                     className={classes.textField}
                                     margin="normal"
-                                    label="Comment"
+                                    label="Comment:"
                                     InputProps={{ name: 'comment' }}
                                     onChange={onChange}
                                     value={comment}
