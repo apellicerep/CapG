@@ -16,7 +16,10 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function AutocompleteConsultantNew({ setConsultant, consultantsDefault }) {
+/**
+ * Autocomplete text field, can select consultant as options that gets from api.
+ */
+export default function AutocompleteConsultantNew({ history, setConsultant, consultantsDefault }) {
     const classes = useStyles();
     const [consultants, setConsultants] = useState([])
     const [loading, setLoading] = useState(true)
@@ -27,9 +30,8 @@ export default function AutocompleteConsultantNew({ setConsultant, consultantsDe
             const { data } = await axios.get(`${url.apiBaseUrl}/users`)
             setConsultants(data.data)
 
-
         } catch (err) {
-            // //history.push('/error')
+            history.push('/error')
         }
     }
     useEffect(() => {
@@ -49,7 +51,6 @@ export default function AutocompleteConsultantNew({ setConsultant, consultantsDe
                 defaultValue={consultantsDefault}
                 // eslint-disable-next-line
                 onChange={(e, value) => {
-                    console.log(value)
                     // eslint-disable-next-line
                     return setConsultant(value)
                 }}

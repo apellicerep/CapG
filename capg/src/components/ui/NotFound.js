@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
 /**
  * Page Not Found
  */
-export default function PageNotFound({ history }) {
+export default function NotFound({ history }) {
     const classes = useStyles()
     const preventDefault = e => {
         e.preventDefault()
@@ -33,7 +33,7 @@ export default function PageNotFound({ history }) {
                     Error 404:
             </Typography>
                 <Typography variant="h3" gutterBottom>
-                    Page Not Found :(
+                    Not Found :(
             </Typography>
                 <Divider />
 

@@ -21,6 +21,10 @@ function asyncHandler(cb) {
     }
 }
 
+
+// @route       GET api/seed
+// @desc        **Testing purpose** seed the database.
+// @access      Public
 router.get('/', asyncHandler(async (req, res) => {
     const users = await User.bulkCreate([
         { name: "Pepe", surname: "Palm", email: "pepe@gmail.com", isManager: 0 },

@@ -45,6 +45,9 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+/**
+ * Renders the Sign In page 
+ */
 export default function SignIn(props) {
 
     const authContext = useContext(AuthContext)
@@ -55,7 +58,7 @@ export default function SignIn(props) {
         email: "",
         password: ""
     })
-
+    const { email, password } = user
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -66,20 +69,18 @@ export default function SignIn(props) {
 
     if (isAuthenticated) props.history.push('/')
 
-    const { email, password } = user
 
+    //update state assignment from user input.
     const onChange = e => setUser({ ...user, [e.target.name]: e.target.value })
 
     const onSubmit = e => {
         e.preventDefault();
-        //console.log('Login submit')
         login({
             email,
             password
         })
 
     }
-
 
     return (
         <Container component="main" maxWidth="xs">

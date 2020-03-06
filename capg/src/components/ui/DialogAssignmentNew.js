@@ -6,14 +6,14 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import { makeStyles } from '@material-ui/core/styles';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Snackbar from '@material-ui/core/Snackbar';
 import Grid from '@material-ui/core/Grid';
 import TodayIcon from '@material-ui/icons/Today';
 import axios from 'axios'
 import { Alert } from '@material-ui/lab';
 import { Typography } from '@material-ui/core'
-import LinearProgress from './LinearProgress'
 import url from '../../utils/url.js'
 import AutocompleteConsultantNew from './AutocompleteConsultantNew'
 import SelectPercentage from './SelectPercentage'
@@ -31,7 +31,6 @@ const useStyles = makeStyles(theme => ({
 
     botonElement: {
         margin: theme.spacing(2),
-        borderRadius: '20%'
     },
     textField: {
         //margin: theme.spacing(1),
@@ -50,14 +49,19 @@ const useStyles = makeStyles(theme => ({
 
 const error = false
 
-export default function DialogAssignmentNew({ assignments, setRefresh }) {
+
+/**
+ * New Assignment Form
+ */
+export default function DialogAssignmentNew({ history, assignments, setRefresh }) {
 
     const classes = useStyles();
     const [dialogOpen, setDialogOpen] = useState(false);
-    const [loading, setLoading] = useState(true)
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [consultants, setConsultant] = useState("")
+    const [errors422, setErrors422] = useState(null)
+    const [errors400, setErrors400] = useState(null)
     const [assignment, setAssignment] = useState({
         clientId: "",
         name: "",
@@ -71,6 +75,7 @@ export default function DialogAssignmentNew({ assignments, setRefresh }) {
 
     const { clientId, name, percentage, comment } = assignment
 
+    //update state assignment from user input.
     const onChange = e => setAssignment({ ...assignment, [e.target.name]: e.target.value })
 
     const onDialogOpen = () => {
@@ -85,6 +90,8 @@ export default function DialogAssignmentNew({ assignments, setRefresh }) {
             percentage: "",
             comment: "",
         })
+        setErrors400(null)
+        setErrors422(null)
     }
 
     const onCreate = async (e) => {
@@ -100,21 +107,46 @@ export default function DialogAssignmentNew({ assignments, setRefresh }) {
             setRefresh()
 
         } catch (err) {
-            console.log(err)
+            if (err.response) {
+                if (err.response.status === 400) {
+                    //console.log(err.response.data.errors)
+                    const errorsMsg = err.response.data.errors.map(error => error.msg)
+                    setErrors400(errorsMsg)
+                    setErrors422(null)
+
+                } else if (err.response.status === 422) {
+                    const errorsMsg = err.response.data.message
+                    setErrors422(errorsMsg)
+                    setErrors400(null)
+                } else {
+                    //error 500
+                    history.push('/error')
+                }
+            } else {
+                //console.log(err.request)
+                history.push('/error')
+            }
         }
     }
 
-    // if (loading) return <LinearProgress />
 
     return (
         <>
-            <Button onClick={onDialogOpen} className={classes.botonElement} size="small" variant="contained" color="primary">+</Button>
+            {/* <Button onClick={onDialogOpen} className={classes.botonElement} size="small" variant="contained" color="primary">+</Button> */}
+            <Fab onClick={onDialogOpen} className={classes.botonElement} color="primary" aria-label="add">
+                <AddIcon />
+            </Fab>
             <Dialog open={dialogOpen} onClose={onDialogClose}>
                 <form className={classes.form} onSubmit={onCreate} >
                     <DialogTitle>New Assignment</DialogTitle>
-                    {error &&
+                    {errors400 &&
                         <div className={classes.root}>
-                            <Alert severity="error"><Typography variant="body2">{error}</Typography></Alert>
+                            <Alert severity="error">{errors400.map((err, i) => <Typography key={i} variant="body2">{err}</Typography>)}</Alert>
+                        </div>
+                    }
+                    {errors422 &&
+                        <div className={classes.root}>
+                            <Alert severity="error"><Typography variant="body2">{errors422}</Typography></Alert>
                         </div>
                     }
                     <DialogContent className={classes.dialog}>
@@ -128,13 +160,12 @@ export default function DialogAssignmentNew({ assignments, setRefresh }) {
                                     InputProps={{ name: 'name' }}
                                     onChange={onChange}
                                     value={name}
-                                    required
 
                                 />
                             </Grid>
 
                             <Grid item xs={12} sm={6} md={6}>
-                                <SelectClientNew clients={arrayClients} client={clientId} onChange={onChange} />
+                                <SelectClientNew clients={arrayClients} history={history} client={clientId} onChange={onChange} />
                             </Grid>
                             <Grid className={classes.margin} item xs={12} sm={6} md={6}>
                                 <MuiPickersUtilsProvider utils={DateMomentUtils}>

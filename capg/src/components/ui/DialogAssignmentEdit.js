@@ -20,6 +20,7 @@ import SelectClientNew from './SelectClientNew'
 import DateMomentUtils from '@date-io/moment'
 import SelectPercentage from './SelectPercentage'
 
+
 import "moment/locale/es"
 import {
     MuiPickersUtilsProvider,
@@ -53,7 +54,11 @@ const useStyles = makeStyles(theme => ({
 
 const error = false
 
-export default function DialogAssignmentEdit({ itemId, setRefresh }) {
+
+/**
+ * Edit Assignment Form
+ */
+export default function DialogAssignmentEdit({ history, itemId, setRefresh }) {
 
     const classes = useStyles();
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -62,6 +67,8 @@ export default function DialogAssignmentEdit({ itemId, setRefresh }) {
     const [endDate, setEndDate] = useState(new Date());
     const [consultants, setConsultant] = useState(null)
     const [assignment, setAssignment] = useState({})
+    const [errors422, setErrors422] = useState(null)
+    const [errors400, setErrors400] = useState(null)
 
     const fecthAssignment = async () => {
         const obj = {}
@@ -75,12 +82,20 @@ export default function DialogAssignmentEdit({ itemId, setRefresh }) {
             setConsultant(data.data.Users)
             setLoading(false)
         } catch (err) {
-            //history.push('/error')
+            if (err.response) {
+                if (err.response.status === 404) {
+                    return history.push('/notfound')
+                }
+            }
+            history.push('/error')
         }
+
     }
+
 
     const { clientId, name, percentage, comment } = assignment
 
+    //update state assignment from user input.
     const onChange = e => setAssignment({ ...assignment, [e.target.name]: e.target.value })
 
     const onDialogOpen = () => {
@@ -105,7 +120,12 @@ export default function DialogAssignmentEdit({ itemId, setRefresh }) {
             setRefresh()
 
         } catch (err) {
-            console.log(err)
+            if (err.response) {
+                if (err.response.status === 404) {
+                    return history.push('/notfound')
+                }
+            }
+            history.push('/error')
         }
     }
 
@@ -122,11 +142,28 @@ export default function DialogAssignmentEdit({ itemId, setRefresh }) {
             setRefresh()
 
         } catch (err) {
-            console.log(err)
+            if (err.response) {
+                if (err.response.status === 400) {
+                    //console.log(err.response.data.errors)
+                    const errorsMsg = err.response.data.errors.map(error => error.msg)
+                    setErrors400(errorsMsg)
+                    setErrors422(null)
+
+                } else if (err.response.status === 422) {
+                    const errorsMsg = err.response.data.message
+                    setErrors422(errorsMsg)
+                    setErrors400(null)
+                } else {
+                    //error 500
+                    history.push('/error')
+                }
+            } else {
+                //console.log(err.request)
+                history.push('/error')
+            }
         }
     }
 
-    //if (loading) return <IconButton aria-label="delete"><EditIcon /></IconButton>
 
     return (
         <>
@@ -135,9 +172,14 @@ export default function DialogAssignmentEdit({ itemId, setRefresh }) {
                 <Dialog open={dialogOpen} onClose={onDialogClose}>
                     <form className={classes.form} onSubmit={onUpdate} >
                         <DialogTitle>Update Assignment</DialogTitle>
-                        {error &&
+                        {errors400 &&
                             <div className={classes.root}>
-                                <Alert severity="error"><Typography variant="body2">{error}</Typography></Alert>
+                                <Alert severity="error">{errors400.map((err, i) => <Typography key={i} variant="body2">{err}</Typography>)}</Alert>
+                            </div>
+                        }
+                        {errors422 &&
+                            <div className={classes.root}>
+                                <Alert severity="error"><Typography variant="body2">{errors422}</Typography></Alert>
                             </div>
                         }
                         <DialogContent className={classes.dialog}>
@@ -154,7 +196,6 @@ export default function DialogAssignmentEdit({ itemId, setRefresh }) {
                                         InputProps={{ name: 'name' }}
                                         onChange={onChange}
                                         value={name}
-                                        required
 
                                     />
                                 </Grid>

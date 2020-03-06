@@ -17,7 +17,9 @@ function asyncHandler(cb) {
     }
 }
 
-//ruta que nos sirve para mantener el state del current user en el front.
+// @route       GET api/auth
+// @desc        Get logged in user
+// @access      Private
 router.get('/', auth, asyncHandler(async (req, res) => {
 
     const user = await User.findByPk(req.currentUser.id)
@@ -30,14 +32,17 @@ router.get('/', auth, asyncHandler(async (req, res) => {
         )
 }))
 
+
+// @route       POST api/auth
+// @desc        Log In user & get Token
+// @access      Public
 router.post('/', asyncHandler(async (req, res) => {
     const { email, password } = req.body
     const pass = env.password //poner en .env 
     const passOK = password === pass
-    //comprobar que el user existe en la base de datos
+
     try {
-        //llamamos a "fake api" para que nos de el visto bueno pasandole las nuevas 
-        //credenciales.
+        //I have simulated a call to a "Fake Auth api" .
         const fakeApi = () => new Promise(resolve => {
             setTimeout(() => resolve(true), 500)
         })

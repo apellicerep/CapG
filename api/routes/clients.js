@@ -14,7 +14,9 @@ function asyncHandler(cb) {
     }
 }
 
-
+// @route       GET api/clients
+// @desc        Get all clients in the system.
+// @access      Private 
 router.get('/', auth, asyncHandler(async (req, res) => {
 
     const clientes = await Client.findAll({

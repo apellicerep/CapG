@@ -1,11 +1,14 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
+/**
+ * Linear progress indicator that appears when the data is not
+ * ready in the Main page.
+ */
 export default function LinearPorgress() {
 
     return (
-        <CircularProgress color="secondary" />
+        // <CircularProgress color="secondary" />
+        <LinearProgress color="secondary" />
     );
 }

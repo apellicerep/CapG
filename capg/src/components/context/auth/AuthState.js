@@ -27,7 +27,7 @@ const AuthState = props => {
 
     const [state, dispatch] = useReducer(authReducer, initialState)
 
-    //Load User
+    //Load User, check loaged user to keep state update.
     const loadUser = async () => {
         if (localStorage.token) {
             setAuthtoken(localStorage.token)

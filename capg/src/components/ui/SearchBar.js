@@ -11,7 +11,7 @@ const usePaperStyles = makeStyles(theme => ({
         display: 'flex',
         alignItems: 'center',
         width: '16rem',
-        // width: '100%',
+        // width: '30%',
         margin: theme.spacing(2)
     },
     input: {
@@ -23,7 +23,9 @@ const usePaperStyles = makeStyles(theme => ({
     }
 }));
 
-
+/**
+ * Search Bar Component
+ */
 export default function SearchBar({ buscador, search }) {
     const classes = usePaperStyles()
 

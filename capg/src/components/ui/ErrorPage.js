@@ -16,6 +16,10 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(4)
     }
 }));
+
+/**
+ * Error page component
+ */
 export default function ErrorPage({ history }) {
     const classes = useStyles()
     const preventDefault = e => {

@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const { User, Client, Assignment, UserAssignment } = require('../models')
+const { User, Client, Assignment } = require('../models')
 const { body, validationResult } = require('express-validator')
 const auth = require('../middleware/auth')
 const { Op } = require("sequelize");
 
-/* Handler function to wrap each route. */
+//Handler function to wrap each route. 
 function asyncHandler(cb) {
     return async (req, res, next) => {
         try {
@@ -16,7 +16,9 @@ function asyncHandler(cb) {
     }
 }
 
-
+// @route       GET api/assignments
+// @desc        Get list of assignments, only assignments of the consultants that the Manager is charge.
+// @access      Private 
 router.get('/', auth, asyncHandler(async (req, res) => {
 
     const userManaged = await User.findAll({
@@ -60,6 +62,11 @@ router.get('/', auth, asyncHandler(async (req, res) => {
 
 }))
 
+
+
+// @route       GET api/assignments/:id
+// @desc        Get individual assignment
+// @access      Private 
 router.get('/:id', auth, asyncHandler(async (req, res) => {
 
     const assignment = await Assignment.findByPk(req.params.id, {
@@ -85,6 +92,10 @@ router.get('/:id', auth, asyncHandler(async (req, res) => {
 
 }))
 
+
+// @route       POST api/assignments
+// @desc        Create new Assignment
+// @access      Private 
 router.post('/', auth, [
     body('name', 'Please introduce a name').not().isEmpty(),
     body('percentage', 'Please introduce a percentage').not().isEmpty(),
@@ -92,8 +103,7 @@ router.post('/', auth, [
     body('start_date', 'Date format incorrect').isISO8601(),
     body('end_date', 'Please introduce a end date').not().isEmpty(),
     body('end_date', 'Date format incorrect').isISO8601(),
-    body('clientId', 'Please introduce a client Id').not().isEmpty(),
-    body('clientId', 'Must be an Integer').isInt(),
+    body('clientId', 'Please introduce client name').not().isEmpty(),
     body('consultants', 'Please introduce consultants').not().isEmpty()
 ],
     asyncHandler(async (req, res, next) => {
@@ -107,13 +117,12 @@ router.post('/', auth, [
         try {
             const asign = await Assignment.create(req.body)
             await asign.addUser(consultants.map(i => i.id))
-            // await asign.addUser(consultants, { through: { nameAssignment: name, nameConsultant: "inventado" } })
             res.status(201).end()
         } catch (error) {
 
             if (error.name === "SequelizeUniqueConstraintError") {
                 error.message = "The name of the assignment must be unique"
-                error.status = 400
+                error.status = 422
                 next(error)
             } else {
                 throw error;
@@ -121,6 +130,10 @@ router.post('/', auth, [
         }
     }))
 
+
+// @route       UPDATE api/assignments/:id
+// @desc        Update individual asignments
+// @access      Private 
 router.put('/:id', auth, [
     body('name', 'Please introduce a name').not().isEmpty(),
     body('percentage', 'Please introduce a percentage').not().isEmpty(),
@@ -128,8 +141,7 @@ router.put('/:id', auth, [
     body('start_date', 'Date format incorrect').isISO8601(),
     body('end_date', 'Please introduce a end date').not().isEmpty(),
     body('end_date', 'Date format incorrect').isISO8601(),
-    body('clientId', 'Please introduce a client Id').not().isEmpty(),
-    body('clientId', 'Must be an Integer').isInt(),
+    body('clientId', 'Please introduce a client name').not().isEmpty(),
     body('consultants', 'Please introduce consultants').not().isEmpty()
 ],
     asyncHandler(async (req, res, next) => {
@@ -151,7 +163,7 @@ router.put('/:id', auth, [
             } catch (error) {
                 if (error.name === "SequelizeUniqueConstraintError") {
                     error.message = "The name of the assignment must be unique"
-                    error.status = 400
+                    error.status = 422
                     next(error)
                 } else {
                     throw error;
@@ -162,6 +174,11 @@ router.put('/:id', auth, [
         }
     }))
 
+
+
+// @route       DELETE api/assignments/:id
+// @desc        Delte individual assignments
+// @access      Private 
 router.delete('/:id', auth, asyncHandler(async (req, res) => {
 
     const assignment = await Assignment.findByPk(req.params.id)

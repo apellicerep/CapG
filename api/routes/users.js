@@ -14,6 +14,9 @@ function asyncHandler(cb) {
     }
 }
 
+// @route       GET api/users
+// @desc        Get only consultants that the Manager is in charge.
+// @access      Private
 router.get('/', auth, asyncHandler(async (req, res) => {
     const userManaged = await User.findAll({
         attributes: ['id', 'name', 'surname'],

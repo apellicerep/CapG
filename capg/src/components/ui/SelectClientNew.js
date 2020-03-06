@@ -17,7 +17,10 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function SelectClientNew({ client, onChange }) {
+/**
+ * Autocomplete text field, Manager can select name client as options that gets from api.
+ */
+export default function SelectClientNew({ history, client, onChange }) {
     const classes = useStyles();
     const [clients, setClients] = useState([])
     const [loading, setLoading] = useState(true)
@@ -27,9 +30,8 @@ export default function SelectClientNew({ client, onChange }) {
             const { data } = await axios.get(`${url.apiBaseUrl}/clients`)
             setClients(data.data)
 
-
         } catch (err) {
-            //history.push('/error')
+            history.push('/error')
         }
     }
 

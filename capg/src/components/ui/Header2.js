@@ -10,6 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { Container } from '@material-ui/core';
 import AuthContext from '../context/auth/authContext'
+import LinearProgress from '../ui/LinearProgress'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -24,17 +25,17 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function Header2({ userName }) {
+
+/**
+ * App Bar Header
+ */
+export default function Header2({ userName, loading }) {
     const authContext = useContext(AuthContext)
     const { logout } = authContext
     const classes = useStyles();
     const [auth, setAuth] = React.useState(true);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
-
-    const handleChange = event => {
-        setAuth(event.target.checked);
-    };
 
     const handleMenu = event => {
         setAnchorEl(event.currentTarget);
@@ -93,6 +94,7 @@ export default function Header2({ userName }) {
                         </div>
                     )}
                 </Toolbar>
+                {loading && <LinearProgress />}
             </AppBar>
         </div>
     );

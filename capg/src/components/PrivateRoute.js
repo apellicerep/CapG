@@ -2,9 +2,12 @@ import React, { useContext } from 'react'
 import { Route, Redirect } from 'react-router-dom'
 import AuthContext from '../components/context/auth/authContext'
 
-const RutaPrivada = ({ component: Component, ...rest }) => {
+/**
+ * Control view of the private Routes
+ */
+const PrivateRoute = ({ component: Component, ...rest }) => {
     const authContext = useContext(AuthContext)
-    const { isAuthenticated, loading, name } = authContext
+    const { isAuthenticated, loading } = authContext
     return (
         <Route {...rest}
             render={(props) =>
@@ -17,4 +20,4 @@ const RutaPrivada = ({ component: Component, ...rest }) => {
         />
     )
 }
-export default RutaPrivada
+export default PrivateRoute

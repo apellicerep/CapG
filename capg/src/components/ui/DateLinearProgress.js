@@ -1,5 +1,5 @@
 import React from 'react';
-import { lighten, makeStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
@@ -30,14 +30,13 @@ const useStyles = makeStyles(theme => ({
 
 
 
-// '#ff6c5c'
-
-// rojo y amarillo
-// '#ff002b' : '#FFBA60'
+/**
+ * Component that represents the percentage of completition of the project and shows the start and end date of the project.
+ * the component alerts to the Manager on the Assignments where the end date is 1 month ahead. 
+ */
 export default function DateLianearProgress({ prog, startDate, endDate }) {
     const classes = useStyles();
-
-    //("moment", moment(endDate, "YYYY-MM-DD").fromNow());
+    //check how many days ahead from end date.
     const alarm = moment(endDate).diff(moment(new Date()), 'days') < 30 ? true : false
 
     return (

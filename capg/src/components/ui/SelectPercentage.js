@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -17,10 +17,12 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+
+/**
+ * Autocomplete text field, Manager can select percentage as options.
+ */
 export default function SelectClientNew({ percentage, onChange }) {
     const classes = useStyles();
-    const [loading, setLoading] = useState(true)
-    console.log(percentage)
 
     return (
 

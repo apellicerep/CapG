@@ -20,6 +20,7 @@ const useStyles = makeStyles(theme => ({
         width: '100%',
         //maxWidth: 360,
         backgroundColor: theme.palette.background.paper,
+        marginTop: theme.spacing(3)
     },
     grey: {
         color: 'grey',
@@ -27,7 +28,12 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function Main() {
+/**
+ * Layout component,main view of the app that consume from api the list of the assignments
+ * and renderes the rest of the components, also has the logic for the filter of the serchBar that
+ * allows the Manager filter(through name assignment or client) assignments.
+ */
+export default function Main({ history }) {
     const authContext = useContext(AuthContext)
     const { name, isAuthenticated } = authContext
 
@@ -42,7 +48,7 @@ export default function Main() {
             setAssignments(data.data)
             setLoading(false)
         } catch (err) {
-            //history.push('/error')
+            history.push('/error')
         }
     }
 
@@ -56,26 +62,29 @@ export default function Main() {
         // eslint-disable-next-line
     }, [loading, isAuthenticated]);
 
+    //update state from database.
     function setRefresh() {
         setLoading(true)
     }
 
     const buscador = value => setSearch(value)
 
-
+    //filter assignments, through name assignment or client.
     const assignmentsFiltered = (search !== "") ?
         assignments.filter(item => (item.name.toLowerCase().includes(search.toLowerCase())) ||
             (item.Client.name.toLowerCase().includes(search.toLocaleLowerCase())) ? true : false)
         : assignments
 
 
+
+
     if (!isAuthenticated) return null
-    if (loading) return <LinearProgress />
+    if (loading) return <Header2 loading={loading} userName={name} />
 
 
     return (
         <>
-            <Header2 userName={name} />
+            <Header2 loading={loading} userName={name} />
 
             <Container maxWidth="md" disableGutters={true}>
                 {assignments.length ?
@@ -83,27 +92,23 @@ export default function Main() {
                         <Grid
                             container
                             direction="row"
-                            justify="flex-end"
+                            justify="space-between"
                             alignItems="center"
+                            wrap='nowrap'
                         >
                             <Grid item  >
                                 <SearchBar buscador={buscador} search={search} />
                             </Grid>
                             <Grid item>
-                                <DialogAssignmentNew setRefresh={setRefresh} assignments={assignments} />
+                                <DialogAssignmentNew history={history} setRefresh={setRefresh} assignments={assignments} />
                             </Grid>
                         </Grid>
                         <List
                             component="nav"
                             aria-labelledby="nested-list-subheader"
-                            subheader={
-                                <ListSubheader component="div" id="nested-list-subheader">
-
-                                </ListSubheader>
-                            }
                             className={classes.root}
                         >
-                            {assignmentsFiltered.map((item, index) => <Assignment setRefresh={setRefresh} index={index} key={item.id} item={item} />)}
+                            {assignmentsFiltered.map((item, index) => <Assignment history={history} setRefresh={setRefresh} index={index} key={item.id} item={item} />)}
                         </List>
                     </>
                     :

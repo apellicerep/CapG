@@ -16,11 +16,6 @@ module.exports = (sequelize) => {
             type: Sequelize.STRING,
             unique: true,
             allowNull: false
-        },
-        isManager: {
-            type: Sequelize.BOOLEAN,
-            allowNull: false,
-            defaultValue: false
         }
 
     }, { sequelize });
