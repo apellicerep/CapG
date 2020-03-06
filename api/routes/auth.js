@@ -3,7 +3,8 @@ const router = express.Router()
 const jwt = require('jsonwebtoken')
 const auth = require('../middleware/auth')
 const { User } = require('../models')
-const env = require('../config.js')
+const dotenv = require('dotenv')
+dotenv.config()
 
 
 /* Handler function to wrap each route. */
@@ -38,7 +39,8 @@ router.get('/', auth, asyncHandler(async (req, res) => {
 // @access      Public
 router.post('/', asyncHandler(async (req, res) => {
     const { email, password } = req.body
-    const pass = env.password //poner en .env 
+    console.log(req.body)
+    const pass = process.env.PASSWORD //poner en .env 
     const passOK = password === pass
 
     try {
@@ -56,7 +58,6 @@ router.post('/', asyncHandler(async (req, res) => {
         if (!(user && credentials && passOK)) {
             return res.status(400).json({ msg: 'Invalid Credentials' })
         }
-
         const payload = {
             user: {
                 id: user.get({ plain: true }).id,
@@ -66,7 +67,7 @@ router.post('/', asyncHandler(async (req, res) => {
 
         jwt.sign(
             payload,
-            "!secret928!!!", //env variable
+            process.env.SECRET, //env variable
             {
                 expiresIn: 36000
             },
