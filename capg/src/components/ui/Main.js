@@ -72,10 +72,19 @@ export default function Main({ history }) {
     //filter assignments, through name assignment or client.
     const assignmentsFiltered = (search !== "") ?
         assignments.filter(item => (item.name.toLowerCase().includes(search.toLowerCase())) ||
-            (item.Client.name.toLowerCase().includes(search.toLocaleLowerCase())) ? true : false)
+            filterUser(item) || (item.Client.name.toLowerCase().includes(search.toLocaleLowerCase())) ? true : false)
         : assignments
 
+    function filterUser(item) {
+        let match = false
+        for (let user of item.Users) {
+            if (user.name.toLowerCase().includes(search.toLowerCase())) {
+                match = true
+            }
+        }
+        return match
 
+    }
 
 
     if (!isAuthenticated) return null

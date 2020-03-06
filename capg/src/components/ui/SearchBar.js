@@ -38,7 +38,7 @@ export default function SearchBar({ buscador, search }) {
                 onChange={(e) => buscador(e.target.value)}
                 value={search}
                 className={classes.input}
-                placeholder="Search"
+                placeholder="consultant,assign,client"
                 inputProps={{ 'aria-label': 'buscar usuarios' }}
             />
         </Paper>
