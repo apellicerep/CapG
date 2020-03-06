@@ -39,9 +39,6 @@ router.get('/', auth, asyncHandler(async (req, res) => {
     const arrayUsersManaged = userManaged.map(user => user.get({ plain: true }).id)
 
     const assignments = await Assignment.findAll({
-        order: [[
-            'name', 'ASC'
-        ]],
         attributes: {
             exclude: ['createdAt', 'updatedAt', 'clientId']
         },

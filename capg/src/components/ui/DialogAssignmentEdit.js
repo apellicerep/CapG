@@ -80,8 +80,6 @@ export default function DialogAssignmentEdit({ history, itemId, setRefresh }) {
             obj.comment = data.data.comment
             setAssignment(obj)
             setConsultant(data.data.Users)
-            setStartDate(data.data.start_date)
-            setEndDate(data.data.end_date)
             setLoading(false)
         } catch (err) {
             if (err.response) {
@@ -205,7 +203,7 @@ export default function DialogAssignmentEdit({ history, itemId, setRefresh }) {
                                 <Grid item xs={12} sm={6} md={6}>
                                     <SelectClientNew client={clientId} onChange={onChange} />
                                 </Grid>
-                                <Grid item xs={12} sm={6} md={6}>
+                                <Grid className={classes.margin} item xs={12} sm={6} md={6}>
                                     <MuiPickersUtilsProvider utils={DateMomentUtils}>
                                         <DatePicker
                                             autoOk
@@ -262,6 +260,7 @@ export default function DialogAssignmentEdit({ history, itemId, setRefresh }) {
                                         InputProps={{ name: 'comment' }}
                                         onChange={onChange}
                                         value={comment}
+                                        multiline
                                     />
 
                                 </Grid>
@@ -269,7 +268,7 @@ export default function DialogAssignmentEdit({ history, itemId, setRefresh }) {
                             </Grid>
                         </DialogContent>
                         <DialogActions>
-                            <Grid className={classes.container} container justify="space-between" >
+                            <Grid className={classes.container} wrap="nowrap" container justify="space-between" >
                                 <Grid >
                                     <Button onClick={onDelete} variant="contained" color="secondary">
                                         Delete
