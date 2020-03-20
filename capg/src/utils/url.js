@@ -1,3 +1,3 @@
 export default {
-    apiBaseUrl: 'http://localhost:5000/api'
+    apiBaseUrl: 'https://capg-4ujw4gyo2q-uc.a.run.app/api'
 }
