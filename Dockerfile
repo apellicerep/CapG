@@ -7,7 +7,7 @@ COPY /capg .
 RUN npm run build
 
 FROM node:10-alpine 
-WORKDIR /api
+WORKDIR /app/api
 COPY /api/package.json .
 COPY /api/package-lock.json .
 RUN npm install
