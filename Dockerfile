@@ -12,5 +12,5 @@ COPY /api/package.json .
 COPY /api/package-lock.json .
 RUN npm install
 COPY /api .
-COPY --from=build-dep /api
+COPY --from=build-dep /app/build .
 RUN npm start
