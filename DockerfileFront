@@ -10,7 +10,7 @@ RUN npm install --production
 COPY /capg .  
 
 RUN npm run build
-
+ 
 # ========= RUN =========
 FROM nginx:1.17
 
