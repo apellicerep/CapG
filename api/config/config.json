@@ -1,14 +1,20 @@
 {
-    "development": {
-        "dialect": "sqlite",
-        "storage": "development.db"
-    },
     "test": {
         "dialect": "sqlite",
         "storage": "test.db"
     },
+    "development": {
+        "dialect": "mysql",
+        "username": "root",
+        "password": "passw2",
+        "database": "test",
+        "host": "/cloudsql/capg-271711:europe-west1:test"
+    },
     "production": {
-        "dialect": "sqlite",
-        "storage": "production.db"
+        "dialect": "mysql",
+        "user": "root",
+        "password": "passw2",
+        "database": "test",
+        "host": "/cloudsql/capg-271711:europe-west1:test"
     }
 }
