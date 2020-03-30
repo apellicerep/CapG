@@ -25,7 +25,7 @@ app.use(cors({
 }));
 
 ////Production
-app.use(express.static(path.join(__dirname, 'build')));
+//app.use(express.static(path.join(__dirname, 'build')));
 
 app.use(morgan('dev'));
 app.use(express.json());
@@ -37,9 +37,9 @@ app.use('/api/seed', seedRouter)
 app.use('/api/auth', authRouter)
 
 ////Production
-app.get('/*', function (req, res) {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+// app.get('/*', function (req, res) {
+//     res.sendFile(path.join(__dirname, 'build', 'index.html'));
+// });
 
 // send 404 if no other route matched
 app.use((req, res) => {
