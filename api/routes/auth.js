@@ -36,7 +36,7 @@ router.get('/', auth, asyncHandler(async (req, res) => {
 
 // @route       POST api/auth
 // @desc        Log In user & get Token
-// @access      Public
+// @access      Publics
 router.post('/', asyncHandler(async (req, res) => {
     const { email, password } = req.body
     console.log(req.body)
