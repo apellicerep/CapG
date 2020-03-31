@@ -40,6 +40,7 @@ router.get('/', auth, asyncHandler(async (req, res) => {
 router.post('/', asyncHandler(async (req, res) => {
     const { email, password } = req.body
     console.log(req.body)
+    console.log(process.env.PASSWORD)
     const pass = process.env.PASSWORD //poner en .env 
     const passOK = password === pass
 
