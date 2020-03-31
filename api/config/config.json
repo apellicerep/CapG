@@ -14,7 +14,7 @@
     },
     "production": {
         "dialect": "mysql",
-        "user": "root",
+        "username": "root",
         "password": "passw2",
         "database": "test",
         "dialectOptions": {
