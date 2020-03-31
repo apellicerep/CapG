@@ -1,3 +1,3 @@
 export default {
-    apiBaseUrl: 'https://capg-4ujw4gyo2q-uc.a.run.app/api'
+    apiBaseUrl: 'https://back-4ujw4gyo2q-ew.a.run.app/api'
 }
