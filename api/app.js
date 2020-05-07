@@ -37,9 +37,9 @@ app.use('/api/seed', seedRouter)
 app.use('/api/auth', authRouter)
 
 ////Production
-// app.get('/*', function(req, res) {
+// app.get('/*', function (req, res) {
 //     res.sendFile(path.join(__dirname, 'build', 'index.html'));
-//   });
+// });
 
 // send 404 if no other route matched
 app.use((req, res) => {
@@ -60,7 +60,7 @@ app.use((err, req, res, next) => {
 });
 
 // set our port
-app.set('port', process.env.PORT || 5000);
+app.set('port', process.env.PORT || 8080);
 
 
 // start listening on our port -con { force: true } creo tablas de nuevo y pierdo la info!

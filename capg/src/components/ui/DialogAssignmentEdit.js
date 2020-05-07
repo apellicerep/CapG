@@ -78,6 +78,8 @@ export default function DialogAssignmentEdit({ history, itemId, setRefresh }) {
             obj.name = data.data.name
             obj.percentage = data.data.percentage
             obj.comment = data.data.comment
+            setStartDate(data.data.start_date)
+            setEndDate(data.data.end_date)
             setAssignment(obj)
             setConsultant(data.data.Users)
             setLoading(false)
@@ -260,6 +262,7 @@ export default function DialogAssignmentEdit({ history, itemId, setRefresh }) {
                                         InputProps={{ name: 'comment' }}
                                         onChange={onChange}
                                         value={comment}
+                                        multiline
                                     />
 
                                 </Grid>
@@ -267,7 +270,7 @@ export default function DialogAssignmentEdit({ history, itemId, setRefresh }) {
                             </Grid>
                         </DialogContent>
                         <DialogActions>
-                            <Grid className={classes.container} container justify="space-between" >
+                            <Grid className={classes.container} wrap="nowrap" container justify="space-between" >
                                 <Grid >
                                     <Button onClick={onDelete} variant="contained" color="secondary">
                                         Delete
